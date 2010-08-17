@@ -1,0 +1,36 @@
+#Download New Referrers
+
+##Purpose
+This web app will connect to a google analytics account in order to download any referring domains that haven't been seen previously.
+
+##Spec
+
+1) The application should validate the user using AuthSub (http://code.google.com/apis/analytics/docs/gdata/gdataAuthentication.html#understandingAuthSub) which ensures that a user never needs to give the application their username or password.
+
+2) The application should then display a list of accounts it has access to.
+
+3) Once the user has chosen an account the application should display a list of available functions. Initially this will just be download new referrers, however the application must be architected in a way that makes it easy to add in new functions that can share the core code.
+
+a) Each function call will have an associated set of parameters that the user must be able to override. In this case they are: 
+$minTraffic (int) as the minimum number of visits required to qualify to be downloaded. This should default to 10.
+$downloadPeriod as the period of time we are looking for new referrers in. This should default to 1 calendar month.
+$comparePeriod as the period of time we are downloading our comparison set of referrers. This should default to 6 calendar months.
+
+4) 
+a) The application will then download a list of referring domains that have sent traffic (greater than $minTraffic) to the site in the past $downloadPeriod. These should be stored into a temporary table (potential new referrers).
+b) The application will then download a list of referring domains that have sent traffic (greater than $minTraffic) to the site in the $comparePeriod prior to period downloaded above. These should also be stored into a temporary table (old referrers).
+c) Finally the application should select all referring domains in potential new referrers that aren't present in old referrers. These should be stored in a permanent table. They should be linked to a table storing the profile, the current date, and the variables ($minTraffic, $downloadPeriod, $comparePeriod) used to generate the list.
+
+5) The application should then present the list in a sortable table along with an option to download a csv containing all the links.
+
+##Constraints
+
+The application must be written in php.
+
+The application must be able to deal with large datasets without increasing the $max_execution_time and without timing out. This could be solved by using javascript to make multiple calls to the script to download and process the data.
+
+The application must keep display logic separate from any application code.
+
+The application must allow for future expansion such as adding further functions to be performed once the authorisation is complete.
+
+Any non standard modules must be okayed prior to use, (you can assume CURL is installed as standard).
