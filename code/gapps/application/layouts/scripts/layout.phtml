@@ -3,9 +3,20 @@
 <head>
     <title>GApp Collection</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <?php echo $this->headLink()->appendStylesheet($this->baseUrl().'/css/global.css') ?>
+    <?php echo $this->headLink(); ?>
+    <?php echo $this->headScript(); ?>
 </head>
 <body>
-    <?php echo $this->layout()->content; ?>
+    <div id="loading_container">
+        Loading...
+    </div>
+    <div id="loaded_container" style="display: none;">
+        <div class="header">
+            <?php echo $this->navigation(); ?>
+            <div class="signbox"><strong>Signed In</strong> | <a href="#">Sign Out</a></div>
+        </div>
+        <div class="content"><?php echo $this->layout()->content; ?></div>
+    </div>
+    <img src="<?php echo $this->baseUrl() ?>/img/dummy.gif" style="display:none" alt="required for Google Data"/>
 </body>
 </html>

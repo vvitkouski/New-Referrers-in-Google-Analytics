@@ -1,5 +1,0 @@
-AddDefaultCharset utf-8
-
-RewriteEngine on
-
-RewriteRule ^((?!(favicon.ico$|js/|skin/|media/)).*) index.php?request=$1 [L,QSA]

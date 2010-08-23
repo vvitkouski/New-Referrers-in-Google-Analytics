@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<configdata>
+    <production>
+        <default>
+            <css>css/global.css</css>
+            <js>http://www.google.com/jsapi</js>
+            <js>js/jquery-1.4.2.min.js</js>
+            <js>js/global.js</js>
+        </default>
+        <ganalytics>
+            <default>
+                <css>css/ganalytics.css</css>
+            </default>
+            <newreferrers>
+                <js>js/ganalytics/newreferrers.js</js>
+            </newreferrers>
+        </ganalytics>
+    </production>
+    <staging extends="production"></staging>
+    <testing extends="production"></testing>
+</configdata>

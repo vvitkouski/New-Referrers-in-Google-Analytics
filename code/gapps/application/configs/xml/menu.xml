@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<configdata>
+    <production>
+        <mainmenu>
+            <item>
+                <label>New Referrers in Google Analytics</label>
+                <title>New Referrers in Google Analytics</title>
+                <controller>ganalytics</controller>
+                <action>newreferrers</action>
+                <order>0</order>
+            </item>
+            <item>
+                <label>Application 2</label>
+                <title>Application 2</title>
+                <controller>application</controller>
+                <action>2</action>
+                <order>1</order>
+            </item>
+            <item>
+                <label>Application 3</label>
+                <title>Application 3</title>
+                <controller>application</controller>
+                <action>3</action>
+                <order>2</order>
+            </item>
+        </mainmenu>
+    </production>
+    <staging extends="production"></staging>
+    <testing extends="production"></testing>
+</configdata>

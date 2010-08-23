@@ -1,0 +1,68 @@
+/* RESET */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+}
+label, input, textarea {
+    vertical-align: middle;
+}
+input[type=text], input[type=password], textarea {
+    border: 1px solid #848f95;
+}
+input[type=submit], input[type=button] {
+    background-color: #1977c5;
+    border: 1px solid #e2dc22;
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 1px;
+}
+body, a, img, fieldset, ul, ol, h1, h2, h3, p {
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+a {
+    color: #1111cc;
+}
+/* CONTAINERS */
+#loading_container {
+    font-weight: bold;
+    padding: 5px;
+}
+/* HEADER */
+.header {
+    border-bottom: 1px solid #CAD8F1;
+    padding: 3px 8px 5px 8px;
+}
+.header .mainnav li {
+    display: inline;
+    margin-right: 0.6em;
+}
+.header .mainnav {
+    float: left;
+}
+.header .mainnav li.active a {
+    color: #000;
+    cursor: default;
+    font-weight: bold;
+    text-decoration: none;
+}
+.signbox {
+    text-align: right;
+}
+/* CONTENT */
+.content {
+    padding: 10px;
+}
+/* BOXES */
+.rounded {
+    border: 1px solid gray;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
