@@ -10,8 +10,11 @@
         <ganalytics>
             <default>
                 <css>css/ganalytics.css</css>
+                <js>js/ganalytics.js</js>
+                <js>js/jquery.validate.js</js>
             </default>
             <newreferrers>
+                <css>css/ganalytics/newreferrers.css</css>
                 <js>js/ganalytics/newreferrers.js</js>
             </newreferrers>
         </ganalytics>

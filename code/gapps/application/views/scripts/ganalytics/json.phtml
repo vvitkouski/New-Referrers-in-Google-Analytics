@@ -1,0 +1,7 @@
+<?php if (isset($this->jsonData)) : ?>
+<?php
+echo Zend_Json::encode($this->jsonData);
+?>
+<?php else : ?>
+{"error":"1", "error_message":"no data"}
+<?php endif; ?>

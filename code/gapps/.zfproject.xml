@@ -13,9 +13,17 @@
         </controllerFile>
         <controllerFile controllerName="Error"/>
       </controllersDirectory>
-      <formsDirectory enabled="false"/>
+      <formsDirectory enabled="false">
+        <formFile formName="GanalyticsNewreferrersSettings"/>
+      </formsDirectory>
       <layoutsDirectory enabled="false"/>
-      <modelsDirectory/>
+      <modelsDirectory>
+        <dbTableDirectory>
+          <dbTableFile dbTableName="GanalyticsNewreferrerReport"/>
+        </dbTableDirectory>
+        <modelFile modelName="GanalyticsNewreferrerMapper"/>
+        <modelFile modelName="GanalyticsNewreferrer"/>
+      </modelsDirectory>
       <modulesDirectory enabled="false"/>
       <viewsDirectory>
         <viewScriptsDirectory>

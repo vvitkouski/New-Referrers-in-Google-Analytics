@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>GApp Collection</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <?php echo $this->headLink(); ?>
+    <script type="text/javascript">
+        var APP_BASE_URL = '<?php echo $this->baseUrl(); ?>';
+    </script>
+    <?php echo $this->headScript(); ?>
+</head>
+<body>
+    <div id="loading_container">
+        Loading...
+    </div>
+    <div id="loaded_container" style="display: none;">
+        <div class="header">
+            <?php echo $this->navigation(); ?>
+            <div class="signbox"><strong>Signed In</strong> | <a href="#" id="header-sign-out">Sign Out</a></div>
+        </div>
+        <div class="content">
+            <!-- account selecter -->
+            <div class="rounded ga-account-selectbox">
+                <label for="ga_account_name">Account:</label> <select id="ga_account_name"></select>
+            </div>
+            <!-- /account selector -->
+            <?php echo $this->layout()->content; ?>
+        </div>
+    </div>
+    <img src="<?php echo $this->baseUrl(); ?>/img/dummy.gif" style="display:none" alt="required for Google Data"/>
+</body>
+</html>

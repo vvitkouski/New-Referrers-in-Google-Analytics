@@ -1,0 +1,24 @@
+.ga-main-table {
+    width: 100%;
+}
+.ga-main-table th, .ga-main-table td {
+    text-align: left;
+    padding: 0 0 10px 25px;
+    vertical-align: top;
+}
+.ga-main-right-col {
+    border-left: 1px solid gray;
+    padding-right: 25px;
+    
+}
+.ga-main-table .zend_form dd {
+    padding-bottom: 10px;
+}
+#submit-label {
+    display: none;
+}
+.ga-main-table .zend_form .error {
+    border-color: #ff0000;
+    color: #ff0000;
+    display: block;
+}

@@ -6,18 +6,7 @@ body {
 label, input, textarea {
     vertical-align: middle;
 }
-input[type=text], input[type=password], textarea {
-    border: 1px solid #848f95;
-}
-input[type=submit], input[type=button] {
-    background-color: #1977c5;
-    border: 1px solid #e2dc22;
-    color: #fff;
-    cursor: pointer;
-    font-size: 0.9em;
-    padding: 1px;
-}
-body, a, img, fieldset, ul, ol, h1, h2, h3, p {
+body, a, img, fieldset, ul, ol, h1, h2, h3, p, dl, dt, dd {
     border: none;
     margin: 0;
     padding: 0;

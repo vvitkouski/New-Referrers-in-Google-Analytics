@@ -1,9 +1,24 @@
 /* GLOBAL JS */
+// Domready
+$(document).ready(function() {
+    // Logout button event
+    $('#header-sign-out').click(gLogout);
+});
+
 // Init google
-function gInit(scope) {
+function gLogin(scope) {
     if (!google.accounts.user.checkLogin(scope)) {
         google.accounts.user.login(scope);
+        return false;
+    } else {
+        return true;
     }
+}
+
+// gLogout
+function gLogout() {
+    google.accounts.user.logout();
+    setTimeout(function(){window.location.reload()}, 2000);
 }
 
 // onLoad handler
@@ -18,4 +33,6 @@ function appOnLoadHandler() {
 function gHandleError(e) {
     alert('Error');
     alert(e);
+    google.accounts.user.logout();
+    window.location.reload();
 }

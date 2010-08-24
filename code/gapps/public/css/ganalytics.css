@@ -1,8 +1,9 @@
 /* BOXES */
 .ga-account-selectbox {
     background-color: #CAD8F1;
+    margin-bottom: 40px;
     padding: 10px;
 }
 #ga_account_name {
-    width: 150px;
+    width: 400px;
 }

@@ -1,5 +1,39 @@
-<!-- account selecter -->
-<div class="rounded ga-account-selectbox">
-    Account: <select id="ga_account_name"></select>
-</div>
-<!-- /account selector -->
+<!-- base layout -->
+<table cellspacing="0" cellpadding="0" class="ga-main-table">
+    <col width="270" />
+    <col />
+    <thead><tr>
+        <th><h2>New Report</h2></th>
+        <th class="ga-main-right-col"><h2>Recend Reports</h2></th>
+    </tr></thead>
+    <tbody>
+        <tr>
+            <td>
+                <?php echo $this->settingsForm; ?>
+            </td>
+            <td class="ga-main-right-col">
+                <?php foreach ($this->reports AS $report) : ?>
+                    <h3>#<?php echo $report->getId().' '.$report->getAccountName().' / '.$report->getProfileName(); ?></h3><br />
+                    <table cellspacing="0" cellpadding="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th style="text-align: left; border: 1px solid gray;">Host</ht>
+                                <th style="text-align: left; border: 1px solid gray;">Visits</ht>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $referrers = $report->getReferrers(); ?>
+                            <?php foreach ($referrers AS $referrer) : ?>
+                            <tr>
+                                <td style="padding: 5px; border: 1px solid gray;"><?php echo $referrer['host'] ?></td>
+                                <td style="padding: 5px; border: 1px solid gray;"><?php echo $referrer['visits'] ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table><br /><br />
+                <?php endforeach; ?>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<!-- /base layout -->
