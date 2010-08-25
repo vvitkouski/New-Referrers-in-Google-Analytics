@@ -17,6 +17,7 @@ CREATE TABLE `ga_nr_referrer` (
     `id`  int(10) unsigned NOT NULL auto_increment,
     `report_id` int(10) unsigned NOT NULL,
     `host` varchar(255) NOT NULL default '',
+    `page_path` varchar(255) NOT NULL default '',
     `visits` int(10) unsigned NOT NULL,
     PRIMARY KEY  (`id`),
     KEY `FK_REPORT_ID` (`report_id`),

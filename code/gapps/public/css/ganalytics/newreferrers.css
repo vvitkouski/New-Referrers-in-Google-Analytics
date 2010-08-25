@@ -6,6 +6,9 @@
     padding: 0 0 10px 25px;
     vertical-align: top;
 }
+.ga-main-table a {
+    color: #354258;
+}
 .ga-main-right-col {
     border-left: 1px solid gray;
     padding-right: 25px;
@@ -21,4 +24,91 @@
     border-color: #ff0000;
     color: #ff0000;
     display: block;
+}
+.ga-report {
+    border-collapse: collapse;
+    width: 100%;
+}
+.ga-report th, .ga-report td {
+    padding: 5px;
+    text-align: left;
+}
+.ga-report td {
+    background-color: #f7f7f7;
+    border: 1px solid #dedede;
+}
+.ga-report th {
+    cursor: pointer;
+    border: 1px solid #e6c698;
+    border-bottom: none;
+    background-color: #ffdca9;
+}
+.ga-report th div {
+    background-position: right center;
+    background-repeat: no-repeat;
+}
+.ga-report .ga-report-center {
+    text-align: center;
+}
+.ga-report-wrapper {
+    background-color: #f29000;
+    padding: 0 5px;
+}
+.ga-report-headline {
+    padding: 10px 0;
+}
+.ga-report-headline h3 {
+    color: #fff;
+}
+.ga-report-list {
+    list-style: none;
+}
+.ga-report-list li {
+    border-top: 1px solid #eee;
+    color: #777;
+    padding: 3px;
+}
+.ga-report-list li.ga-report-list-first {
+    border-top: none;
+}
+.ga-recent-report-list {
+    border-top: 1px solid #eee;
+    list-style: none;
+}
+.ga-recent-report-list li {
+    background-color: #F7F7F7;
+    border: 1px solid #eee;
+    border-top: none;
+}
+.ga-recent-report-list li a {
+    color: #222;
+    display: block;
+    overflow: hidden;
+    height: 1%;
+    padding: 5px;
+    text-decoration: none;
+}
+.ga-recent-report-date {
+    float: right;
+}
+.ga-report-info {
+    font-weight: bold;
+    margin: 10px 0;
+    width: 300px;
+}
+.ga-main-table .ga-report-info td {
+    padding: 0 0 5px 0;
+    text-align: left;
+}
+.ga-report .header div {
+    background-image: url(/gapps/New-Referrers-in-Google-Analytics/code/gapps/public/img/asc_desc.gif);
+}
+.ga-report .headerSortDown div {
+    background-image: url(/gapps/New-Referrers-in-Google-Analytics/code/gapps/public/img/desc.gif) !important;  
+}
+.ga-report .headerSortUp div {
+    background-image: url(/gapps/New-Referrers-in-Google-Analytics/code/gapps/public/img/asc.gif) !important;
+}
+#contentBand {
+    margin-bottom: 0 !important;
 }

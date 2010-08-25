@@ -20,7 +20,7 @@ function gaInit() {
                 window.gaAccounts = new Array();
                 window.gaService.getAccountFeed('https://www.google.com/analytics/feeds/accounts/default?max-results='+window.gaConfig.accountsMaxResults, gaHandleAccountFeed, gHandleError);
             }
-        }, 2000);
+        }, 4000);
         
     });
 }
@@ -45,6 +45,11 @@ function appInit() {
     for (var i = 0; i < window.gaAccounts.length; i++) {
         gaAccountNameSelect.append('<option value="'+window.gaAccounts[i].getTableId().getValue()+'">'+window.gaAccounts[i].getPropertyValue('ga:AccountName')+' -- '+window.gaAccounts[i].getTitle().getText()+'</option>');
     }
+    // Call local onload hanler
+    if (gaLocalOnLoadHandler != undefined) {
+        gaLocalOnLoadHandler();
+    }
     // Call onload handler
     appOnLoadHandler();
 }
+

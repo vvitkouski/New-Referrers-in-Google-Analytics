@@ -31,8 +31,5 @@ function appOnLoadHandler() {
 
 // Error handler
 function gHandleError(e) {
-    alert('Error');
-    alert(e);
-    google.accounts.user.logout();
-    window.location.reload();
+    $('#loading_container').html(e);
 }

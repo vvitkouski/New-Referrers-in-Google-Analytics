@@ -82,6 +82,48 @@ class Application_Model_GanalyticsNewreferrerReportMapper
         return $entries;
     }
 
+    public function findReportsWithReferrers()
+    {
+        $select = $this->getDbTable()->select();
+        $select->from('ga_nr_report')->where('id IN (SELECT `report_id` FROM `ga_nr_referrer`)')->order('id DESC');
+        $resultSet = $this->getDbTable()->fetchAll($select);
+        $entries   = array();
+        foreach ($resultSet as $row) {
+            $entry = new Application_Model_GanalyticsNewreferrerReport();
+            $entry->setId($row->id)
+                    ->setAccountName($row->account_name)
+                    ->setProfileName($row->profile_name)
+                    ->setTableId($row->table_id)
+                    ->setMinTraffic($row->min_traffic)
+                    ->setDownloadPeriod($row->download_period)
+                    ->setComparePeriod($row->compare_period)
+                    ->setCreatedDate($row->created_date);
+            $entries[] = $entry;
+        }
+        return $entries;
+    }
+
+    public function findByTableId($tableId)
+    {
+        $select = $this->getDbTable()->select();
+        $select->from('ga_nr_report')->where('table_id = ?', $tableId)->where('id IN (SELECT `report_id` FROM `ga_nr_referrer`)')->order('id DESC');
+        $resultSet = $this->getDbTable()->fetchAll($select);
+        $entries   = array();
+        foreach ($resultSet as $row) {
+            $entry = new Application_Model_GanalyticsNewreferrerReport();
+            $entry->setId($row->id)
+                    ->setAccountName($row->account_name)
+                    ->setProfileName($row->profile_name)
+                    ->setTableId($row->table_id)
+                    ->setMinTraffic($row->min_traffic)
+                    ->setDownloadPeriod($row->download_period)
+                    ->setComparePeriod($row->compare_period)
+                    ->setCreatedDate($row->created_date);
+            $entries[] = $entry;
+        }
+        return $entries;
+    }
+
     public function createTempTable($tableName)
     {
         $this->getDbTable()->getAdapter()->query("
@@ -89,6 +131,7 @@ class Application_Model_GanalyticsNewreferrerReportMapper
                     `id`  int(10) unsigned NOT NULL auto_increment,
                     `report_id` int(10) unsigned NOT NULL,
                     `host` varchar(255) NOT NULL default '',
+                    `page_path` varchar(255) NOT NULL default '',
                     `visits` int(10) unsigned NOT NULL,
                     PRIMARY KEY  (`id`)
                 )  ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Google Analytics New Referrers Tmp Table';
@@ -103,7 +146,22 @@ class Application_Model_GanalyticsNewreferrerReportMapper
 
     public function insertReferers($tableName, $refererrs)
     {
-        $this->getDbTable()->getAdapter()->insert($tableName, $refererrs);
+        if (!count($refererrs)) return;
+        $sql = "INSERT INTO `{$tableName}` (report_id, host, page_path, visits) VALUES ";
+        $bind = array();
+        foreach ($refererrs AS $referrer) {
+            $reportId = (isset($referrer['report_id'])) ? (int)$referrer['report_id'] : 0;
+            $host = (isset($referrer['host'])) ? $referrer['host'] : '';
+            $pagePath = (isset($referrer['page_path'])) ? $referrer['page_path'] : '';
+            $visits = (isset($referrer['visits'])) ? (int)$referrer['visits'] : '';
+            $bind[] = $reportId;
+            $bind[] = $host;
+            $bind[] = $pagePath;
+            $bind[] = $visits;
+            $sql .= " (?, ?, ?, ?),";
+        }
+        $sql = substr($sql, 0, strlen($sql) - 1);
+        $this->getDbTable()->getAdapter()->query($sql, $bind);
     }
 
     public function processReferrers($reportId)
@@ -113,7 +171,7 @@ class Application_Model_GanalyticsNewreferrerReportMapper
         $minCreatedDate = date("Y-m-d H\\\:i\\\:s", time() - $report->getComparePeriod() * 86400);
         
         $sql = "
-            INSERT INTO `ga_nr_referrer` (report_id, host, visits) SELECT report_id, host, visits FROM `ga_nr_tmp_".$reportId."` WHERE host NOT IN (SELECT `host` FROM `ga_nr_referrer` WHERE `report_id` NOT IN (SELECT id FROM ga_nr_report WHERE created_date < ?));
+            INSERT INTO `ga_nr_referrer` (report_id, host, page_path, visits) SELECT report_id, host, page_path, visits FROM `ga_nr_tmp_".$reportId."` WHERE host NOT IN (SELECT `host` FROM `ga_nr_referrer` WHERE `report_id` NOT IN (SELECT id FROM ga_nr_report WHERE created_date < ?));
         ";
         $this->getDbTable()->getAdapter()->query($sql, array($minCreatedDate));
     }

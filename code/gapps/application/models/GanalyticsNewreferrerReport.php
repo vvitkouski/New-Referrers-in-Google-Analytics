@@ -167,7 +167,10 @@ class Application_Model_GanalyticsNewreferrerReport
     {
         if ($this->_id) {
             $select = $this->getDbTable()->getAdapter()->select();
-            $select->from('ga_nr_referrer')->where('report_id = ?', $this->_id);
+            $select->from('ga_nr_referrer', array('host', 'CONCAT("<ul class=\'ga-report-list\'><li class=\'ga-report-list-first\'>", GROUP_CONCAT(page_path SEPARATOR "</li><li>"), "</li></ul>") AS pages', 'SUM(visits) AS total_visits'))
+                    ->where('report_id = ?', $this->_id)
+                    ->group('host')
+                    ->order('host');
             $stmt = $this->getDbTable()->getAdapter()->query($select);
             $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
             return $result;

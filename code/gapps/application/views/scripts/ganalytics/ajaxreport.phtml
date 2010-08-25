@@ -1,0 +1,68 @@
+<?php $report = $this->report; ?>
+<a href="<?php echo $this->baseUrl() ?>/ganalytics/ajaxgetreports/table_id/<?php echo $report->getTableId(); ?>/" id="ga-report-back_link">« Back to reports</a>
+
+<?php if (!count($report)) : ?>
+
+<br /><br />Empty Result
+
+<?php else : ?>
+
+<table class="ga-report-info">
+    <col width="150" />
+    <col />
+    <tbody>
+        <tr>
+            <td>Account:</td>
+            <td><?php echo $report->getAccountName(); ?></td>
+        </tr>
+        <tr>
+            <td>Profile:</td>
+            <td><?php echo $report->getProfileName(); ?></td>
+        </tr>
+        <tr>
+            <td>Table ID:</td>
+            <td><?php echo $report->getTableId(); ?></td>
+        </tr>
+        <tr>
+            <td>Minimum Traffic:</td>
+            <td><?php echo $report->getMinTraffic(); ?></td>
+        </tr>
+        <tr>
+            <td>Download Period:</td>
+            <td><?php echo $report->getDownloadPeriod(); ?> day(s)</td>
+        </tr>
+        <tr>
+            <td>Compare Period:</td>
+            <td><?php echo $report->getComparePeriod(); ?> day(s)</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="ga-report-wrapper" id="ga-report-wrapper">
+    <div class="ga-report-headline"><h3>#<?php echo $report->getId().' '.$report->getAccountName().' / '.$report->getProfileName(); ?></h3></div>
+    <table cellspacing="0" cellpadding="0" class="ga-report" id="ga-report">
+        <col width="200" />
+        <col width="100" />
+        <col  />
+        <thead>
+            <tr>
+                <th><div>Host</div></th>
+                <th><div>Visits</div></th>
+                <th><div>Pages</div></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php $referrers = $report->getReferrers(); ?>
+            <?php foreach ($referrers AS $referrer) : ?>
+            <tr>
+                <td><?php echo $referrer['host'] ?></td>
+                <td class="ga-report-center"><?php echo $referrer['total_visits'] ?></td>
+                <td><?php echo $referrer['pages'] ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <div class="ga-report-headline"><h3>#1 www.belmed.by / www.belmed.by</h3></div>
+</div>
+
+<?php endif; ?>

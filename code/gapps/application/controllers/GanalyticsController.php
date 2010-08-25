@@ -17,12 +17,8 @@ class GanalyticsController extends Zend_Controller_Action
     {
         // Settings Form
         $settingsForm = new Application_Form_GanalyticsNewreferrersSettings();
-        // Get reports
-        $reportMapper = new Application_Model_GanalyticsNewreferrerReportMapper();
-        $reports = $reportMapper->fetchAll();
         // View Vars
         $this->view->settingsForm = $settingsForm;
-        $this->view->reports = $reports;
     }
 
     public function ajaxnrcreatereportAction()
@@ -56,8 +52,8 @@ class GanalyticsController extends Zend_Controller_Action
         $this->getRequest()->getParam('report_id');
         // insert tpm referrers
         $reportMapper = new Application_Model_GanalyticsNewreferrerReportMapper();
-        foreach ($_REQUEST['referrers'] AS $referrer) {
-            $reportMapper->insertReferers('ga_nr_tmp_'.$_REQUEST['report_id'], $referrer);
+        if (is_array($_REQUEST['referrers'])) {
+            $reportMapper->insertReferers('ga_nr_tmp_'.$_REQUEST['report_id'], $_REQUEST['referrers']);
         }
         // JSON DATA
         $this->view->jsonData = array(
@@ -83,6 +79,36 @@ class GanalyticsController extends Zend_Controller_Action
         );
         // set json view
         $this->render('json');
+    }
+
+    public function ajaxgetreportsAction()
+    {
+        // disable layout
+        $this->_helper->layout->disableLayout();
+        // table id
+        $tableId = $this->getRequest()->getParam('table_id');
+        // save session
+        $gaReferrerSession = new Zend_Session_Namespace('gaReferrer');
+        $gaReferrerSession->currentTableId = $tableId;
+        // Get reports
+        $reportMapper = new Application_Model_GanalyticsNewreferrerReportMapper();
+        $reports = $reportMapper->findByTableId($tableId);
+        // View Vars
+        $this->view->reports = $reports;
+    }
+
+    public function ajaxreportAction()
+    {
+        // disable layout
+        $this->_helper->layout->disableLayout();
+        // table id
+        $reportId = $this->getRequest()->getParam('report_id');
+        // Get reports
+        $reportMapper = new Application_Model_GanalyticsNewreferrerReportMapper();
+        $report = new Application_Model_GanalyticsNewreferrerReport();
+        $reportMapper->find($reportId, $report);
+        // View Vars
+        $this->view->report = $report;
     }
 
 }

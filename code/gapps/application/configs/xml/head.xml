@@ -15,6 +15,7 @@
             </default>
             <newreferrers>
                 <css>css/ganalytics/newreferrers.css</css>
+                <js>js/jquery.tablesorter.min.js</js>
                 <js>js/ganalytics/newreferrers.js</js>
             </newreferrers>
         </ganalytics>

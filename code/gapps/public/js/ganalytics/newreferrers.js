@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 // Config
 window.gaNrConfig = {
     feedMaxResults : 100
@@ -13,7 +14,19 @@ $(document).ready(function(){
         }
         return false;
     });
+    $('#ga_account_name').change(function(){
+        loadReports();
+    });
 });
+
+// GA Onload
+function gaLocalOnLoadHandler() {
+    $('#ga_account_name option[value=<?php 
+        $tableId = isset($_SESSION["gaReferrer"]["currentTableId"]) ? ($_SESSION["gaReferrer"]["currentTableId"]) : "";
+        echo $tableId;
+    ?>]').attr("selected",true);
+    loadReports();
+}
 
 // Generate new report
 function gaNrGenerateReport() {
@@ -94,8 +107,9 @@ function saveReferrers(referrers, reportId) {
         }
         tmpArray.push({
             'report_id' : reportId,
-            'host' : referrers[i].getValueOf('ga:source'),
-            'visits' : referrers[i].getValueOf('ga:pageviews') + ''
+            'host'      : referrers[i].getValueOf('ga:source'),
+            'page_path' : referrers[i].getValueOf('ga:pagePath'),
+            'visits'    : referrers[i].getValueOf('ga:pageviews') + ''
         });
     }
     if (tmpArray.length) {
@@ -116,5 +130,31 @@ function sendReferrers(data, reportId, callback) {
 
 
 function processReferrers(reportId) {
-    $.post(APP_BASE_URL+'/ganalytics/ajaxnrprocessreferrers/account_name/report_id/'+reportId+'/', {'report_id' : reportId}, function(){window.location.reload();});
+    $.post(APP_BASE_URL+'/ganalytics/ajaxnrprocessreferrers/account_name/report_id/'+reportId+'/', {'report_id' : reportId}, function(){loadReport(reportId);});
+}
+
+
+function loadReports() {
+    $('#ga-main-content').html('Loading... ');
+    $.get(APP_BASE_URL+'/ganalytics/ajaxgetreports/table_id/'+$('#ga_account_name').val()+'/', function(data) {
+        $('#ga-main-content').html(data);
+        $('#ga_nr_contentheadline').text('Recent Reports');
+        $('#ga-recent-report-list li a').click(function(){
+            loadReport($(this).attr('rel'));
+            return false;
+        });
+    });
+}
+
+function loadReport(reportId) {
+    $('#ga-main-content').html('Loading... ');
+    $.get(APP_BASE_URL+'/ganalytics/ajaxreport/report_id/'+reportId+'/', function(data) {
+        $('#ga-main-content').html(data);
+        $('#ga_nr_contentheadline').text('Report Details #'+reportId);
+        $('#ga-report-back_link').click(function(){
+            loadReports();
+            return false;
+        });
+        $('#ga-report').tablesorter();
+    });
 }

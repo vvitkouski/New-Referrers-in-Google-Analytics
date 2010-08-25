@@ -1,0 +1,11 @@
+<ul class="ga-recent-report-list" id="ga-recent-report-list">
+<?php foreach ($this->reports AS $report) : ?>
+    <li>
+        <a href="<?php echo $this->baseUrl() ?>/ganalytics/ajaxreport/report_id/<?php echo $report->getId() ?>/" rel="<?php echo $report->getId() ?>">
+            <span class="ga-recent-report-date"><?php echo $report->getCreatedDate(); ?></span>
+            #<?php echo $report->getTableId() ?>&nbsp;&nbsp;
+            <?php echo $report->getAccountName().', ',$report->getProfileName() ?>
+        </a>
+    </li>
+<?php endforeach; ?>
+</u>
