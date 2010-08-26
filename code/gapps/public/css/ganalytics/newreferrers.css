@@ -55,9 +55,12 @@
     padding: 0 5px;
 }
 .ga-report-headline {
+    height: 1%;
+    overflow: hidden;
     padding: 10px 0;
 }
 .ga-report-headline h3 {
+    float: left;
     color: #fff;
 }
 .ga-report-list {
@@ -111,4 +114,16 @@
 }
 #contentBand {
     margin-bottom: 0 !important;
+}
+.ga-report-headline-tools {
+    float: right;
+    list-style: none;
+}
+.ga-report-headline-tools li {
+    display: inline;
+    padding-left: 10px;
+}
+.ga-report-headline-tools .csv-icon {
+    background: transparent url(/gapps/New-Referrers-in-Google-Analytics/code/gapps/public/img/icon_csv.gif) no-repeat left center;
+    padding-left: 20px;
 }

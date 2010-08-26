@@ -11,6 +11,8 @@ class Application_Model_GanalyticsNewreferrerReport
     protected $_createdDate;
     protected $_id;
     protected $_dbTable;
+    protected $_referrers;
+    protected $_referrersCount;
  
  
 
@@ -165,18 +167,37 @@ class Application_Model_GanalyticsNewreferrerReport
     
     public function getReferrers()
     {
-        if ($this->_id) {
-            $select = $this->getDbTable()->getAdapter()->select();
-            $select->from('ga_nr_referrer', array('host', 'CONCAT("<ul class=\'ga-report-list\'><li class=\'ga-report-list-first\'>", GROUP_CONCAT(page_path SEPARATOR "</li><li>"), "</li></ul>") AS pages', 'SUM(visits) AS total_visits'))
-                    ->where('report_id = ?', $this->_id)
-                    ->group('host')
-                    ->order('host');
-            $stmt = $this->getDbTable()->getAdapter()->query($select);
-            $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-            return $result;
-        } else {
-            return Array();
+        if (is_null($this->_referrers)) {
+            if ($this->_id) {
+                $select = $this->getDbTable()->getAdapter()->select();
+                $select->from('ga_nr_referrer', array('host', 'CONCAT("<ul class=\'ga-report-list\'><li class=\'ga-report-list-first\'>", GROUP_CONCAT(page_path SEPARATOR "</li><li>"), "</li></ul>") AS pages', 'SUM(visits) AS total_visits'))
+                        ->where('report_id = ?', $this->_id)
+                        ->group('host')
+                        ->order('total_visits DESC');
+                $stmt = $this->getDbTable()->getAdapter()->query($select);
+                $this->_referrers = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+            } else {
+                $this->_referrers = Array();
+            }
         }
+        return $this->_referrers;
+    }
+
+    public function getReferrersCount()
+    {
+        if (is_null($this->_referrersCount)) {
+            if ($this->_id) {
+                $select = $this->getDbTable()->getAdapter()->select();
+                $select->from('ga_nr_referrer', array('COUNT(DISTINCT host) AS count'))
+                        ->where('report_id = ?', $this->_id)
+                        ->group('report_id');
+                $stmt = $this->getDbTable()->getAdapter()->query($select);
+                $this->_referrersCount = $stmt->fetchColumn();
+            } else {
+                $this->_referrersCount = 0;
+            }
+        }
+        return $this->_referrersCount;
     }
 }
 

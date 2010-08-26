@@ -1,7 +1,7 @@
 <?php $report = $this->report; ?>
 <a href="<?php echo $this->baseUrl() ?>/ganalytics/ajaxgetreports/table_id/<?php echo $report->getTableId(); ?>/" id="ga-report-back_link">« Back to reports</a>
 
-<?php if (!count($report)) : ?>
+<?php if (!count($report->getReferrers())) : ?>
 
 <br /><br />Empty Result
 
@@ -39,7 +39,13 @@
 </table>
 
 <div class="ga-report-wrapper" id="ga-report-wrapper">
-    <div class="ga-report-headline"><h3>#<?php echo $report->getId().' '.$report->getAccountName().' / '.$report->getProfileName(); ?></h3></div>
+    <div class="ga-report-headline">
+        <h3>#<?php echo $report->getId().' '.$report->getAccountName().' / '.$report->getProfileName(); ?></h3>
+        <ul class="ga-report-headline-tools">
+            <li><strong><?php echo count($report->getReferrers()) ?> new referrrer(s)</strong></li>
+            <li><a href="<?php echo $this->baseUrl() ?>/ganalytics/csvreferrers/report_id/<?php echo $report->getId(); ?>/NewReferrersReport<?php echo $report->getId(); ?>.csv" class="csv-icon">Download as CSV</a></li>
+        </ul>
+    </div>
     <table cellspacing="0" cellpadding="0" class="ga-report" id="ga-report">
         <col width="200" />
         <col width="100" />
@@ -62,7 +68,13 @@
             <?php endforeach; ?>
         </tbody>
     </table>
-    <div class="ga-report-headline"><h3>#1 www.belmed.by / www.belmed.by</h3></div>
+    <div class="ga-report-headline">
+        <h3>#<?php echo $report->getId().' '.$report->getAccountName().' / '.$report->getProfileName(); ?></h3>
+        <ul class="ga-report-headline-tools">
+            <li><strong><?php echo count($report->getReferrers()) ?> new referrrer(s)</strong></li>
+            <li><a href="<?php echo $this->baseUrl() ?>/ganalytics/csvreferrers/report_id/<?php echo $report->getId(); ?>/NewReferrersReport<?php echo $report->getId(); ?>.csv" class="csv-icon">Download as CSV</a></li>
+        </ul>
+    </div>
 </div>
 
 <?php endif; ?>

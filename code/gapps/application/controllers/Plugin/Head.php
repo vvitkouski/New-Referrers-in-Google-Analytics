@@ -61,7 +61,7 @@
             if (substr($link, 0, 7) == 'http://' || substr($link, 0, 8) == 'https://') {
                 $this->_view->headLink()->appendStylesheet($link);
             } else {
-                $this->_view->headLink()->appendStylesheet($this->_view->baseUrl().'/'.$link);
+                $this->_view->headLink()->appendStylesheet($this->_view->baseUrl().'/'.$link.'?rand='.time());
             }
         }
         
@@ -69,7 +69,7 @@
             if (substr($src, 0, 7) == 'http://' || substr($src, 0, 8) == 'https://') {
                 $this->_view->headScript()->appendFile($src);
             } else {
-                $this->_view->headScript()->appendFile($this->_view->baseUrl().'/'.$src);
+                $this->_view->headScript()->appendFile($this->_view->baseUrl().'/'.$src.'?rand='.time());
             }
         }
     }

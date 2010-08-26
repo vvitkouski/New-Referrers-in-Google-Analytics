@@ -103,12 +103,53 @@ class GanalyticsController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         // table id
         $reportId = $this->getRequest()->getParam('report_id');
-        // Get reports
+        // Get report
         $reportMapper = new Application_Model_GanalyticsNewreferrerReportMapper();
         $report = new Application_Model_GanalyticsNewreferrerReport();
         $reportMapper->find($reportId, $report);
         // View Vars
         $this->view->report = $report;
+    }
+
+    public function csvreferrersAction()
+    {
+        // disable layout
+        $this->_helper->layout->disableLayout();
+        // table id
+        $reportId = $this->getRequest()->getParam('report_id');
+        // Get report
+        $reportMapper = new Application_Model_GanalyticsNewreferrerReportMapper();
+        $report = new Application_Model_GanalyticsNewreferrerReport();
+        $reportMapper->find($reportId, $report);
+        // CSV Content
+        $csvArray = Array();
+        if (count($report->getReferrers())) {
+            $csvArray[] = array('Host', 'Visits');
+            foreach ($report->getReferrers() AS $referrer) {
+                $csvArray[] = array($referrer['host'],  $referrer['total_visits']);
+            }
+        }
+        if (count($csvArray)) {
+            $content = '';
+            $filename = 'NewReferrersReport'.$report->getId().'.csv';
+            while (list($key1, $val1) = each($csvArray)) {
+                while (list($key, $val) = each($val1)) {
+                    $content .= $val.',';
+                }
+                $content = substr($content, 0, -1);
+                $content .= "\n";
+            }
+            // Send content
+            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+            header('Content-Length: ' . strlen($content));
+            header('Content-type: text/x-csv');
+            header('Content-Disposition: attachment; filename='.$fileName);
+            echo $content;
+            exit();
+        } else { 
+            echo 'Incorrect request';
+            exit();
+        }
     }
 
 }
