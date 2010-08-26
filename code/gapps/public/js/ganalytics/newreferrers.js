@@ -15,6 +15,7 @@ $(document).ready(function(){
         return false;
     });
     $('#ga_account_name').change(function(){
+        alert('zzzzz');
         loadReports();
     });
 });

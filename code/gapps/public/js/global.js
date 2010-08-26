@@ -31,5 +31,7 @@ function appOnLoadHandler() {
 
 // Error handler
 function gHandleError(e) {
-    $('#loading_container').html(e);
+    $('#loaded_container').hide();
+    $('#loading_container').show();
+    $('#loading_container').html(e.message);
 }
