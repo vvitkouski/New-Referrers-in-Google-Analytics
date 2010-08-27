@@ -44,16 +44,16 @@ function gaNrGenerateReport() {
     var startDate = new Date();
     var compareDate = new Date();
     var compareEndDate = new Date();
-    var downloadPeriod = $('#download_period').val();
-    var comparePeriod = $('#compare_period').val();
-    if (comparePeriod < downloadPeriod) {
+    var downloadPeriod = parseInt($('#download_period').val());
+    var comparePeriod = parseInt($('#compare_period').val());
+    if (comparePeriod <= downloadPeriod) {
         comparePeriod = downloadPeriod;
     }
     var currentTime = <?php echo time() * 1000 ?>;
     
     startDate.setTime(currentTime - downloadPeriod * 86400000);
     compareDate.setTime(currentTime - comparePeriod * 86400000);
-    compareEndDate.setTime(currentTime - downloadPeriod * 86400000);
+    compareEndDate.setTime(currentTime - (downloadPeriod - 1) * 86400000 );
     window.gaEndDateStr = '<?php echo date("Y-m-d") ?>';
     window.gaStartDateStr = gaDateToStr(startDate);
     window.gaCompareDateStr = gaDateToStr(compareDate);
@@ -61,10 +61,10 @@ function gaNrGenerateReport() {
     var feedUrl = 'https://www.google.com/analytics/feeds/data' +
     '?start-date=' + window.gaStartDateStr +
     '&end-date=' + window.gaEndDateStr +
-    '&dimensions=ga:pageTitle,ga:pagePath,ga:source' +
-    '&filters=ga:pageviews%3E%3D' + $('#min_traffic').val() + ';ga:source!%3D(direct)' +
-    '&metrics=ga:pageviews' +
-    '&sort=-ga:pageviews' +
+    '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source' +
+    '&filters=ga:medium%3D%3Dreferral;ga:visits%3E%3D' + $('#min_traffic').val() + ';ga:source!%3D(direct)' +
+    '&metrics=ga:visits' +
+    '&sort=-ga:visits' +
     '&max-results=' + window.gaNrConfig.feedMaxResults +
     '&ids=' + $('#ga_account_name').val();
     window.gaNrReferrers = new Array();
@@ -98,24 +98,32 @@ function gaNrHandleDataFeed(result, reportId, compare) {
                 }
             }
             if (i >= window.gaNrConfig.feedMaxResults || !compare) {
-                if (i < window.gaNrConfig.feedMaxResults && !compare) compare = true;
+                if (i < window.gaNrConfig.feedMaxResults && !compare) {
+                    compare = true;
+                    if (window.gaCompareDateStr == window.gaStartDateStr) {
+                        gaNrHandleDataFeed({feed: {getEntries: function(){return new Array();}}}, reportId, compare);
+                        return false;
+                    }
+                }
                 if (compare) {
                     var _startDate = window.gaCompareDateStr;
                     var _endDate =  window.gaCompareEndDateStr;
                     var _startIndex = window.gaNrCompareReferrers.length + 1;
+                    var _filter = 'ga:medium%3D%3Dreferral;ga:source!%3D(direct)';
                 } else {
                     var _startDate = window.gaStartDateStr;
                     var _endDate = window.gaEndDateStr;
                     var _startIndex = window.gaNrReferrers.length + 1;
+                    var _filter = 'ga:medium%3D%3Dreferral;ga:visits%3E%3D' + $('#min_traffic').val() + ';ga:source!%3D(direct)';
                 }
                 var feedUrl = 'https://www.google.com/analytics/feeds/data' +
                 '?start-date=' + _startDate +
                 '&end-date=' + _endDate +
                 '&start-index=' + _startIndex +
-                '&dimensions=ga:pageTitle,ga:pagePath,ga:source' +
-                '&filters=ga:pageviews%3E%3D' + $('#min_traffic').val() + ';ga:source!%3D(direct)' +
-                '&metrics=ga:pageviews' +
-                '&sort=-ga:pageviews' +
+                '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source' +
+                '&filters=' + _filter +
+                '&metrics=ga:visits' +
+                '&sort=-ga:visits' +
                 '&max-results=' + window.gaNrConfig.feedMaxResults +
                 '&ids=' + $('#ga_account_name').val();
                 window.gaService.getDataFeed(feedUrl, function(result){gaNrHandleDataFeed(result, reportId, compare);}, gHandleError);
@@ -126,6 +134,23 @@ function gaNrHandleDataFeed(result, reportId, compare) {
         /**/
     } else if (reportId && compare) {
         saveReferrers(window.gaNrReferrers, window.gaNrCompareReferrers, reportId);
+    } else if (reportId && !compare) {
+        compare = true;
+        var _startDate = window.gaCompareDateStr;
+        var _endDate =  window.gaCompareEndDateStr;
+        var _startIndex = window.gaNrCompareReferrers.length + 1;
+        var _filter = 'ga:medium%3D%3Dreferral;ga:source!%3D(direct)';
+        var feedUrl = 'https://www.google.com/analytics/feeds/data' +
+        '?start-date=' + _startDate +
+        '&end-date=' + _endDate +
+        '&start-index=' + _startIndex +
+        '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source' +
+        '&filters=' + _filter +
+        '&metrics=ga:visits' +
+        '&sort=-ga:visits' +
+        '&max-results=' + window.gaNrConfig.feedMaxResults +
+        '&ids=' + $('#ga_account_name').val();
+        window.gaService.getDataFeed(feedUrl, function(result){gaNrHandleDataFeed(result, reportId, compare);}, gHandleError);
     } else {
         alert('Empty result');
         loadReports();
@@ -143,6 +168,7 @@ function saveReferrers(referrers, compareReferrers, reportId) {
         for (var j = 0; j < compareReferrers.length; j++) {
             if (referrers[i].getValueOf('ga:source') == compareReferrers[j].getValueOf('ga:source')) {
                 notIntCompare = false;
+                break;
             }
         }
         if (notIntCompare) {
@@ -150,9 +176,9 @@ function saveReferrers(referrers, compareReferrers, reportId) {
                 'report_id' : reportId,
                 'host'      : referrers[i].getValueOf('ga:source'),
                 'page_path' : referrers[i].getValueOf('ga:pagePath'),
-                'visits'    : referrers[i].getValueOf('ga:pageviews') + ''
+                'visits'    : referrers[i].getValueOf('ga:visits') + ''
             });
-        } 
+        }
     }
     if (tmpArray.length) {
         sendReferrers(tmpArray, reportId, function() {
@@ -172,7 +198,7 @@ function sendReferrers(data, reportId, callback) {
 
 
 function processReferrers(reportId) {
-    $.post(APP_BASE_URL+'/ganalytics/ajaxnrprocessreferrers/account_name/report_id/'+reportId+'/', {'report_id' : reportId}, function(){loadReport(reportId);});
+    $.post(APP_BASE_URL+'/ganalytics/ajaxnrprocessreferrers/report_id/'+reportId+'/', {'report_id' : reportId}, function(){loadReport(reportId);});
 }
 
 
