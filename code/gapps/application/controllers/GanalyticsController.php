@@ -71,8 +71,8 @@ class GanalyticsController extends Zend_Controller_Action
         
         // remove tmp table
         $reportMapper = new Application_Model_GanalyticsNewreferrerReportMapper();
-        $reportMapper->processReferrers($_REQUEST['report_id']);
-        $reportMapper->removeTempTable('ga_nr_tmp_'.$_REQUEST['report_id']);
+        $reportMapper->processReferrers((int)$_REQUEST['report_id']);
+        $reportMapper->removeTempTable('ga_nr_tmp_'.(int)$_REQUEST['report_id']);
         // JSON DATA
         $this->view->jsonData = array(
             'error' => '0'

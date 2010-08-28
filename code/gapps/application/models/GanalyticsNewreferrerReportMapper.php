@@ -171,7 +171,7 @@ class Application_Model_GanalyticsNewreferrerReportMapper
         $minCreatedDate = date("Y-m-d H\\\:i\\\:s", time() - $report->getComparePeriod() * 86400);
         
         $sql = "
-            INSERT INTO `ga_nr_referrer` (report_id, host, page_path, visits) SELECT report_id, host, page_path, visits FROM `ga_nr_tmp_".$reportId."`;
+            INSERT INTO `ga_nr_referrer` (report_id, host, page_path, visits) SELECT report_id, host, page_path, visits FROM `ga_nr_tmp_".$reportId."` WHERE host IN (SELECT host FROM `ga_nr_tmp_".$reportId."` GROUP BY host HAVING SUM(visits) >= ".$report->getMinTraffic().");
         ";
         $this->getDbTable()->getAdapter()->query($sql, array($minCreatedDate));
     }

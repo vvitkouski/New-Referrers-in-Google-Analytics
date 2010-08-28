@@ -32,6 +32,11 @@ function gaDateToStr(date) {
     var dateYear = date.getFullYear();
     var dateMonth = (date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
     var dateDay = (date.getDate() < 10) ? '0' + (date.getDate() + 1) : date.getDate() + 1;
+    if (parseInt(dateYear) % 4 > 0 && dateMonth == '02' && parseInt(dateDay) > 28) {
+        dateMonth = '01';
+        dateDay = '0' + (parseInt(dateDay) - 28);
+        alert('zzzz');
+    }
     return dateYear + '-' + dateMonth + '-' + dateDay;
 }
 
@@ -62,7 +67,7 @@ function gaNrGenerateReport() {
     '?start-date=' + window.gaStartDateStr +
     '&end-date=' + window.gaEndDateStr +
     '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source' +
-    '&filters=ga:medium%3D%3Dreferral;ga:visits%3E%3D' + $('#min_traffic').val() + ';ga:source!%3D(direct)' +
+    '&filters=ga:medium%3D%3Dreferral;ga:source!%3D(direct)' +
     '&metrics=ga:visits' +
     '&sort=-ga:visits' +
     '&max-results=' + window.gaNrConfig.feedMaxResults +
@@ -114,7 +119,7 @@ function gaNrHandleDataFeed(result, reportId, compare) {
                     var _startDate = window.gaStartDateStr;
                     var _endDate = window.gaEndDateStr;
                     var _startIndex = window.gaNrReferrers.length + 1;
-                    var _filter = 'ga:medium%3D%3Dreferral;ga:visits%3E%3D' + $('#min_traffic').val() + ';ga:source!%3D(direct)';
+                    var _filter = 'ga:medium%3D%3Dreferral;ga:source!%3D(direct)';
                 }
                 var feedUrl = 'https://www.google.com/analytics/feeds/data' +
                 '?start-date=' + _startDate +
