@@ -31,7 +31,7 @@ function gaLocalOnLoadHandler() {
 function gaDateToStr(date) {
     var dateYear = date.getFullYear();
     var dateMonth = (date.getMonth() + 1 < 10) ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
-    var dateDay = (date.getDate() < 10) ? '0' + (date.getDate() + 1) : date.getDate() + 1;
+    var dateDay = (date.getDate() < 10) ? '0' + (date.getDate()) : date.getDate();
     if (parseInt(dateYear) % 4 > 0 && dateMonth == '02' && parseInt(dateDay) > 28) {
         dateMonth = '01';
         dateDay = '0' + (parseInt(dateDay) - 28);
