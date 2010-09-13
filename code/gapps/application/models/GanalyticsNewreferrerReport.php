@@ -170,7 +170,7 @@ class Application_Model_GanalyticsNewreferrerReport
         if (is_null($this->_referrers)) {
             if ($this->_id) {
                 $select = $this->getDbTable()->getAdapter()->select();
-                $select->from('ga_nr_referrer', array('host', 'CONCAT("<ul class=\'ga-report-list\'><li class=\'ga-report-list-first\'>", GROUP_CONCAT(page_path SEPARATOR "</li><li>"), "</li></ul>") AS pages', 'SUM(visits) AS total_visits'))
+                $select->from('ga_nr_referrer', array('host', 'CONCAT("<ul class=\'ga-report-list\'><li class=\'ga-report-list-first\'>", GROUP_CONCAT(DISTINCT(page_path) SEPARATOR "</li><li>"), "</li></ul>") AS pages', 'SUM(visits) AS total_visits'))
                         ->where('report_id = ?', $this->_id)
                         ->group('host')
                         ->order('total_visits DESC');

@@ -66,7 +66,7 @@ function gaNrGenerateReport() {
     var feedUrl = 'https://www.google.com/analytics/feeds/data' +
     '?start-date=' + window.gaStartDateStr +
     '&end-date=' + window.gaEndDateStr +
-    '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source' +
+    '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source,ga:referralPath' +
     '&filters=ga:medium%3D%3Dreferral;ga:source!%3D(direct)' +
     '&metrics=ga:visits' +
     '&sort=-ga:visits' +
@@ -125,7 +125,7 @@ function gaNrHandleDataFeed(result, reportId, compare) {
                 '?start-date=' + _startDate +
                 '&end-date=' + _endDate +
                 '&start-index=' + _startIndex +
-                '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source' +
+                '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source,ga:referralPath' +
                 '&filters=' + _filter +
                 '&metrics=ga:visits' +
                 '&sort=-ga:visits' +
@@ -149,7 +149,7 @@ function gaNrHandleDataFeed(result, reportId, compare) {
         '?start-date=' + _startDate +
         '&end-date=' + _endDate +
         '&start-index=' + _startIndex +
-        '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source' +
+        '&dimensions=ga:pageTitle,ga:pagePath,ga:visitCount,ga:source,ga:referralPath' +
         '&filters=' + _filter +
         '&metrics=ga:visits' +
         '&sort=-ga:visits' +
@@ -180,7 +180,7 @@ function saveReferrers(referrers, compareReferrers, reportId) {
             tmpArray.push({
                 'report_id' : reportId,
                 'host'      : referrers[i].getValueOf('ga:source'),
-                'page_path' : referrers[i].getValueOf('ga:pagePath'),
+                'page_path' : 'http://'+referrers[i].getValueOf('ga:source')+referrers[i].getValueOf('ga:referralPath'),
                 'visits'    : referrers[i].getValueOf('ga:visits') + ''
             });
         }
