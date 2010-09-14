@@ -176,12 +176,34 @@ class Application_Model_GanalyticsNewreferrerReport
                         ->order('total_visits DESC');
                 $stmt = $this->getDbTable()->getAdapter()->query($select);
                 $this->_referrers = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+                foreach ($this->_referrers AS &$referrer) {
+                    $referrer['pages'] = $this->getReferrerPages($this->_id, $referrer['host']);
+                }
             } else {
                 $this->_referrers = Array();
             }
         }
         return $this->_referrers;
     }
+
+    public function getReferrerPages($report_id, $host)
+    {
+        $report_id = (int)$report_id;
+        $pages = array();
+        $select = $this->getDbTable()->getAdapter()->select();
+        $select->from('ga_nr_referrer', array('DISTINCT(page_path)'))
+                        ->where('report_id = ?', $report_id)
+                        ->where('host=?', $host)
+                        ->order('visits DESC');
+        $stmt = $this->getDbTable()->getAdapter()->query($select);
+        $result = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        foreach ($result AS $row) {
+            $pages[] = $row['page_path'];
+        }
+        return $pages;
+    }
+
+
 
     public function getReferrersCount()
     {

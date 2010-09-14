@@ -63,7 +63,15 @@
             <tr>
                 <td><?php echo $referrer['host'] ?></td>
                 <td class="ga-report-center"><?php echo $referrer['total_visits'] ?></td>
-                <td><?php echo $referrer['pages'] ?></td>
+                <td>
+                    <ul class="ga-report-list">
+                        <li class="ga-report-list-first">
+                        <?php foreach ($referrer['pages'] AS $page) : ?>
+                            <a href="<?php echo $page; ?>"><?php echo $page; ?></a></li><li>
+                        <?php endforeach; ?>
+                        </li>
+                    </ul>
+                </td>
             </tr>
             <?php endforeach; ?>
         </tbody>
